@@ -4,24 +4,23 @@ import userStore from "@/store/userStore";
 const ApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
-const axiosInstance = ({ headers }) => {
-    const { user, clearUser } = userStore();
+const axiosInstance = () => {
+    const accesstoken = localStorage.getItem("access_token") ?? undefined;
     
     const defaultHeaders = {
-        "authorization": `Bearer ${user?.accesstoken}`,
+        "authorization": accesstoken ? `Bearer ${accesstoken}` : undefined,
         "Content-Type": "application/json"
     };
 
-    const axiosInstance = axios.create({
+    const instance = axios.create({
         baseURL: ApiUrl,
         withCredentials:true,
         headers: {
-            ...defaultHeaders,
-            ...headers
+            ...defaultHeaders
         }
     });
     
-    return axiosInstance;
+    return instance;
 }
 
 

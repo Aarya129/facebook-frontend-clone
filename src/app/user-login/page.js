@@ -88,8 +88,11 @@ const Page = () => {
        const result = await registerUser(payload)
         if(result.status === 'success'){
           router.push('/')
+          toast.success('User register successfully')
         }
-        toast.success('User register successfully')
+        else {
+          throw result;
+        }
     } catch (error) {
       console.error(error);
       // toast.error('email already exist')
@@ -105,14 +108,26 @@ const Page = () => {
      resetSignUpForm()
   },[resetLoginForm,resetSignUpForm])
 
+  const storeInLocalStorage = (data) => {
+    Object.keys(data).map((key) => {
+      localStorage.setItem(key, data[key]);
+    })
+  }
+
 
   const onSubmitLogin = async(data) =>{
     try {
        const result = await loginUser(data)
-       console.log("result", result);
-        setUser(result)
-          router.push('/')
-        toast.success('User login successfully')
+       
+       if(result.status == "success") {
+         setUser(result);
+         storeInLocalStorage(result);
+           router.push('/')
+         toast.success('User login successfully')
+       }
+       else {
+        throw result;
+       }
     } catch (error) {
       console.error(error);
       toast.error('invalid email or password')

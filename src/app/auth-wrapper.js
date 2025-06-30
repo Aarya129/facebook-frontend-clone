@@ -37,7 +37,7 @@ export default function AuthWrapper ({children}){
       }
    
       const handleLogout = async () =>{
-        clearUser()
+        clearUser();
         setIsAuthenticated(false);
         try {
             await logout()
